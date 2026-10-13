@@ -1,0 +1,12 @@
+{
+  "project": "incident-triage-agent",
+  "resource": "incidents",
+  "samples": [
+    {
+      "id": "i1",
+      "title": "Elevated 5xx",
+      "service": "checkout",
+      "severity": "sev2"
+    }
+  ]
+}
