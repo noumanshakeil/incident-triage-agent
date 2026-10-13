@@ -1,0 +1,13 @@
+[project]
+name = "incident-triage-agent"
+version = "2.0.0"
+description = "On-call triage board that scores severity, suggests runbooks, and tracks incident lifecycle."
+requires-python = ">=3.11"
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"

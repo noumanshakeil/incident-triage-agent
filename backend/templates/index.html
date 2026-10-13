@@ -1,53 +1,15 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>{{ title }}</title>
-  <link rel="stylesheet" href="/static/styles.css" />
-</head>
-<body>
-  <main>
-    <h1>{{ title }}</h1>
-    <p class="sub">{{ description }} · LLM <span class="pill">{{ llm_mode }}</span></p>
-    <div class="grid">
-      <section class="card">
-        <h2>Create incident</h2>
-        <form method="post" action="/ui/create">
-        <label>title</label><input name="title" placeholder="title" required />
-<label>symptoms</label><input name="symptoms" placeholder="symptoms" required />
-<label>service</label><input name="service" placeholder="service" required />
-          <button type="submit">Save</button>
-        </form>
-        <h2 style="margin-top:1.25rem">AI action: {{ action }}</h2>
-        <p class="sub">{{ action_desc }}</p>
-        <form method="post" action="/ui/action">
-          <label>prompt</label>
-          <textarea name="prompt" rows="4" placeholder="Describe what you need..."></textarea>
-          <button type="submit">Run {{ action }}</button>
-        </form>
-        {% if last_result %}
-        <h3>Last result</h3>
-        <pre>{{ last_result }}</pre>
-        {% endif %}
-      </section>
-      <section class="card">
-        <h2>{{ resource }} ({{ items|length }})</h2>
-        <table>
-          <thead><tr><th>id</th><th>data</th></tr></thead>
-          <tbody>
-          {% for item in items %}
-            <tr>
-              <td>{{ item.id }}</td>
-              <td><code>{{ item }}</code></td>
-            </tr>
-          {% else %}
-            <tr><td colspan="2">No items yet</td></tr>
-          {% endfor %}
-          </tbody>
-        </table>
-      </section>
-    </div>
-  </main>
-</body>
-</html>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>{{ title }}</title><link rel="stylesheet" href="/static/styles.css"/></head><body><main>
+<h1>{{ title }}</h1><p class="sub">Declare symptoms → severity + runbook → resolve when mitigated.</p>
+<div class="grid"><section class="card"><h2>Declare incident</h2>
+<form method="post" action="/ui/incidents"><label>Title</label><input name="title" required/>
+<label>Service</label><input name="service" value="api"/>
+<label>Symptoms</label><textarea name="symptoms" rows="6" required></textarea>
+<button type="submit">Triage</button></form></section>
+<section class="card"><h2>Active board</h2>
+{% for i in incidents %}<article class="card" style="margin-bottom:.7rem">
+<span class="pill">{{ i.severity }}</span> <span class="pill">{{ i.status }}</span>
+<h3>{{ i.title }}</h3><div class="sub">{{ i.service }}</div><pre>{{ i.runbook_json }}</pre>
+{% if i.status != 'resolved' %}<form method="post" action="/ui/incidents/{{ i.id }}/resolve"><button type="submit">Resolve</button></form>{% endif %}
+</article>{% else %}<p>No incidents.</p>{% endfor %}
+</section></div></main></body></html>
